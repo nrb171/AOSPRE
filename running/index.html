@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/running/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Running your own case - APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Running your own case";
+        var mkdocs_page_input_path = "running.md";
+        var mkdocs_page_url = "/running/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../preliminaries/">Preliminaries and Prerequsites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../building/">Build the AOSPRE executable from source</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acquiretables/">Acquire the CR-SIM tables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testcase/">Run the test case</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Running your own case</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1"></a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#collect-weather-model-output-files">Collect weather model output files</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_2"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#design-a-flight-plan">Design a flight plan</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_3"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-cr-sim-options">Configure CR-SIM options</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_4"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-aospre-namelist">Configure AOSPRE namelist</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_5"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-scanning-tables">Configure scanning tables</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_6"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#program-execution">Program execution</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_7"></a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output">Output</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../namelist/">Namelist</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../scanning_table_library/">Scanning table library</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Running your own case</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuration">Configuration</h1>
+<p>A number of configuration steps are required before running AOSPRE.
+These steps are outlined below.  It may be helpful also to review the
+the <a href="../preliminaries/">"Preliminaries and Prerequisites"</a>
+documentation page.</p>
+<h6 id="_1"></h6>
+<h2 id="collect-weather-model-output-files">Collect weather model output files</h2>
+<p>It is up to the user to either produce their own model simulation
+output or obtain output from another source. Without it, the AOSPRE
+cannot run. It is recommended to use a model output grid spacing no
+larger than 1 km, as higher resolutions are better able to represent
+atmospheric features and variability at the scales needed for AOSPRE to
+produce realistic simulated radar scans.</p>
+<p>Make sure the model output files are in a location accessible from the
+AOSPRE run directory (i.e., not on a remote server).  The files will be
+found at runtime by AOSPRE using the "wrf_glob_pattern"
+<a href="../namelist/">namelist</a> option.  Check to to see that the
+"wrf_glob_pattern" option will find the desired model output files.</p>
+<h6 id="_2"></h6>
+<h2 id="design-a-flight-plan">Design a flight plan</h2>
+<p>The flight path through the simulation is set by
+<a href="../namelist/">namelist</a> options "flight_waypoints_x",
+"flight_waypoints_y", and "flight_waypoints_z".  The x and y
+coordinates are specified in by model grid point index, and the z
+coordinate may be specified in pressure (hPa) or height MSL (m)
+depending on the "flight_level_coordinate" <a href="../namelist/">namelist</a>
+option.  The flight path is traversed by straight line paths between
+successive (x,y,z) coordinates.</p>
+<p>Designing a flight plan can be one of the more difficult parts of
+using AOSPRE.  Users may find the ncview utility useful for examining the
+NWP simulation files and finding gridpoint coordinates at appropriate
+times and locations.  The "flight_planner" shell script (in the
+"scripts" directory) might also be useful.</p>
+<p>Once a flight plan is designed, users may want to run AOSPRE in a mode to
+create a few surveillance PPI scans along the flight path, and use
+these scans to verify that the flight plan is suitable for sampling
+the regions of interest in the NWP simulation, before running more
+extensive and compute-intensive flights and scanning strategies.</p>
+<h6 id="_3"></h6>
+<h2 id="configure-cr-sim-options">Configure CR-SIM options</h2>
+<p>CR-SIM options are configured in the CR-SIM configuration file.  The
+file name for the CR-SIM configuration file is referenced in the AOSPRE
+"CRSIM_Config" <a href="../namelist/">namelist</a> option.</p>
+<p>Only specific settings in the CR-SIM configuration file are used by
+AOSPRE.</p>
+<h6 id="_4"></h6>
+<h2 id="configure-aospre-namelist">Configure AOSPRE namelist</h2>
+<ul>
+<li>See <a href="../namelist/">"Namelist"</a> documentation page.</li>
+</ul>
+<h6 id="_5"></h6>
+<h2 id="configure-scanning-tables">Configure scanning tables</h2>
+<p>AOSPRE scanning tables are organized in a two-column format text file and
+contain information about the primary axis of rotation, sweep mode,
+and the information contained in each column (i.e., rotation and tilt
+angles). The basic scan files use Z as the primary axis of rotation
+with beams pointing at 240&deg; and 275&deg; relative to the aircraft
+fuselage. Tilt angles for the RHI scan are between -53&deg; and
+53.5&deg; at intervals of 1.5&deg; for a total of 72 beams per
+rotation angle. The surveillance scan mode uses a tilt of 0&deg; with
+a full azimuthal rotation at intervals of 1.5&deg; for a total of 241
+beams.</p>
+<p>The user can create their own scan tables as desired.</p>
+<p>Sample scanning tables include:</p>
+<ul>
+<li>Scanning_Table_LHS_PPI_sector_Z (for surveillance mode)</li>
+<li>Scanning_Table_LHS_Multiplexing_RHI_Zprime_ordered (for left panel RHI)</li>
+<li>Scanning_Table_RHS_Multiplexing_RHI_Zprime_ordered (for right panel RHI)</li>
+</ul>
+<p>The scanning table file name is referenced in the AOSPRE namelist.</p>
+<h6 id="_6"></h6>
+<h2 id="program-execution">Program execution</h2>
+<p>Usage</p>
+<p><em>executable</em> <em>namelist</em> [<em>namelist</em> [<em>namelist</em>]]</p>
+<p>MPICH usage</p>
+<p>mpirun -n <np> <em>executable</em> <em>namelist</em> [<em>namelist</em> [<em>namelist</em>]]</p>
+<h6 id="_7"></h6>
+<h2 id="output">Output</h2>
+<h1 id="cfradial-format-netcdf-files">CfRadial-format NetCDF files</h1>
+<p>CfRadial format is described in CfRadial document.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../testcase/" class="btn btn-neutral float-left" title="Run the test case"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../namelist/" class="btn btn-neutral float-right" title="Namelist">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../testcase/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../namelist/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

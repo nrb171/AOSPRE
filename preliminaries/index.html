@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/preliminaries/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Preliminaries and Prerequsites - APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Preliminaries and Prerequsites";
+        var mkdocs_page_input_path = "preliminaries.md";
+        var mkdocs_page_url = "/preliminaries/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Preliminaries and Prerequsites</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#linux-computing-environment-recommended">Linux computing environment recommended</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fortran">Fortran</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#netcdf-c-and-fortran-libraries">NetCDF C and Fortran libraries:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cr-sim">CR-SIM</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#wrf-or-cm1-output-files">WRF or CM1 output files</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#morrison-microphysics-used-in-nwp-model-simulations">Morrison microphysics used in NWP model simulations</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#optional-software-packages">Optional software packages:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mpich-or-openmpi-optional">MPICH or OpenMPI (optional)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ncview-optional">ncview (optional)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lrose-optional">LROSE (optional)</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../building/">Build the AOSPRE executable from source</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acquiretables/">Acquire the CR-SIM tables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testcase/">Run the test case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running/">Running your own case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../namelist/">Namelist</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../scanning_table_library/">Scanning table library</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Preliminaries and Prerequsites</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="preliminaries-and-prerequisites">Preliminaries and Prerequisites</h1>
+<p>Several topics must be considered before attempting to build and run
+AOSPRE.</p>
+<h2 id="linux-computing-environment-recommended">Linux computing environment recommended</h2>
+<blockquote>
+<p>AOSPRE has been developed and tested primarily in Linux environments.
+  Other environments (e.g., MacOS, Docker/Singularity/Apptainer
+  containers) may work for the knowledgeable and motivated user, but
+  are not currently supported.</p>
+<p>Substantial desktop or laptop systems may have the resources for
+  running relatively small, low-resolution experiments through AOSPRE.
+  More detailed, realistic AOSPRE experiments will likely require
+  powerful servers or supercomputer allocations.</p>
+</blockquote>
+<h2 id="fortran">Fortran</h2>
+<blockquote>
+<p>The core code for AOSPRE is Fortran, and has been tested with Fortran
+  compilers from GCC, Intel, and NVidia.</p>
+<p>The GCC gfortran compiler is commonly available through a Linux
+  distribution's package manager (e.g., by installing package
+  "gcc-gfortran"); Intel and NVidia both have Fortran compilers freely
+  available for academic or personal use.  Other modern Fortran
+  compilers may work as well, but have not been tested.</p>
+</blockquote>
+<h2 id="netcdf-c-and-fortran-libraries">NetCDF C and Fortran libraries:</h2>
+<blockquote>
+<p>AOSPRE relies on the NetCDF C and Fortran libraries, software developed
+  by UCAR/Unidata <nobr>(<a href="http://doi.org/10.5065/D6H70CW6">http://doi.org/10.5065/D6H70CW6</a>).</nobr></p>
+<p>Many Linux distributions include NetCDF libraries as an optional
+  package (e.g., from EPEL libraries of Centos and Alma Linux
+  distributions).  Users may also build NetCDF from source with code
+  available from the above URL.  The NetCDF Fortran library should be
+  compiled with the same compiler as will be used to build AOSPRE.
+  NetCDF libraries installed from a Linux software repository are most
+  likely compiled with the GCC gfortran compiler.</p>
+</blockquote>
+<h2 id="cr-sim">CR-SIM</h2>
+<blockquote>
+<p>AOSPRE uses lookup tables distributed with the Cloud Resolving Model
+  Radar Simulator (CR-SIM).  See documentation page <a href="../acquiretables/">"Acquire the
+  CR-SIM tables"</a> for details on how to acquire
+  these files.</p>
+</blockquote>
+<h2 id="wrf-or-cm1-output-files">WRF or CM1 output files</h2>
+<blockquote>
+<p>AOSPRE requires model output files from WRF or CM1.  Best results come
+  from high resolution (smaller than 1-km grid spacing) and high
+  output frequency (smaller than 1 minute).  This implies a large data
+  volume (on the order of gigabytes or even terabytes) which cannot be
+  included in this AOSPRE distribution.  Very small sample model output
+  files, enough for a radar sweep or two, are included in the test
+  directory.</p>
+<blockquote>
+<h3 id="morrison-microphysics-used-in-nwp-model-simulations">Morrison microphysics used in NWP model simulations</h3>
+<p>AOSPRE currently works only with model output files from WRF or CM1
+simulations that have used the Morrison microphysics scheme,
+specifically mp_physics option 10 in the WRF namelist.  Other schemes
+will likely be supported with later releases of AOSPRE.  </li></ul></p>
+</blockquote>
+</blockquote>
+<h2 id="optional-software-packages">Optional software packages:</h2>
+<p>Additionally, users may find some optional packages useful:</p>
+<blockquote>
+<blockquote>
+<h2 id="mpich-or-openmpi-optional">MPICH or OpenMPI (<em>optional</em>)</h2>
+<p>MPICH (<a href="https://www.mpich.org">www.mpich.org</a>) and
+   OpenMPI (<a href="https://www.open-mpi.org/">ww.open-mpi.org</a>)
+   are implementations of the Message Passing Interface (MPI)
+   standard.  AOSPRE uses MPI in its (optional) multi-processor
+   configuration.  These software libraries are commonly available
+   through your Linux distribution's package manager, or may be
+   acquired through their respective web sites.</p>
+<h2 id="ncview-optional">ncview (<em>optional</em>)</h2>
+<p>ncview is commonly used as a quick-look tool for NetCDF
+   format files (which AOSPRE produces). It is available at <a
+   href="https://cirrus.ucsd.edu/ncview">https://cirrus.ucsd.edu/ncview</a>
+   or may be available through your Linux distribution's package
+   manager.</p>
+<h2 id="lrose-optional">LROSE (<em>optional</em>)</h2>
+<p>LROSE is a collection of software for working with Lidar,
+   Radar, and Profiler datasets.  AOSPRE creates files which are
+   compatible with several utilities from the LROSE toolkit.  LROSE may
+   be found at <a href="http://lrose.net">http://lrose.net</a>.</p>
+</blockquote>
+</blockquote>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../building/" class="btn btn-neutral float-right" title="Build the AOSPRE executable from source">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../building/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

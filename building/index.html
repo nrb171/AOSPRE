@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/building/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Build the AOSPRE executable from source - APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Build the AOSPRE executable from source";
+        var mkdocs_page_input_path = "building.md";
+        var mkdocs_page_url = "/building/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../preliminaries/">Preliminaries and Prerequsites</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Build the AOSPRE executable from source</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#obtain-aospre-code">Obtain AOSPRE code</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#clone-the-aospre-github-repository">Clone the AOSPRE GitHub repository</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuring-the-build">Configuring the Build</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#configuring-with-makefile">Configuring with Makefile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuring-with-cmake">Configuring with CMake</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#building">Building</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cleaning">Cleaning</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acquiretables/">Acquire the CR-SIM tables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testcase/">Run the test case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running/">Running your own case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../namelist/">Namelist</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../scanning_table_library/">Scanning table library</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Build the AOSPRE executable from source</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="build-the-aospre-executable-from-source">Build the AOSPRE executable from source</h1>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>For important considerations before trying to build AOSPRE, please see the <a href="../preliminaries/">"Preliminaries and Prerequisites"</a> documentation page.</p>
+<h2 id="obtain-aospre-code">Obtain AOSPRE code</h2>
+<h3 id="clone-the-aospre-github-repository">Clone the AOSPRE GitHub repository</h3>
+<p>The source repository for AOSPRE is located on GitHub at <a href="https://github.com/NCAR/AOSPRE/">https://github.com/NCAR/AOSPRE/</a>.</p>
+<p>It may be obtained by running the following command:</p>
+<p><code>git clone https://github.com/NCAR/AOSPRE.git</code> (HTTP)</p>
+<p><code>git clone git@github.com:NCAR/AOSPRE.git</code> (SSH)</p>
+<p>The source code exists in the directory <code>AOSPRE/code/embed-crsim</code> and is written in Fortran.</p>
+<h2 id="configuring-the-build">Configuring the Build</h2>
+<h3 id="configuring-with-makefile">Configuring with Makefile</h3>
+<p>After downloading the code via <code>git clone</code> as above, and insuring that required prerequisites are installed, change your working directory to the source code directory:</p>
+<p><code>cd AOSPRE/code/embed-crsim</code></p>
+<p>This directory contains the Fortran source code for AOSPRE.  In addition, the file <em><code>Makefile</code></em> has instructions for the <code>make</code> utility to compile the source code.</p>
+<p>Open the <em><code>Makefile</code></em> with your preferred text editor.  Select options most similar to your environment (by removing the leading <em><code>#</code></em> character and spaces), or create a new set of options for your environment following the examples already in the <em><code>Makefile</code></em>.  The following options are used by the <em><code>Makefile</code></em>, and may need to be customized for your particular computing environment:</p>
+<p><strong><code>FC</code></strong> specifies the command that invokes the Fortran compiler.  Common values are <code>gfortran</code> (for the GCC Fortran compiler), <code>ifort</code> (for the Intel Fortran compiler), and <code>nvfortran</code> (for the NVidia Fortran compiler).  For multi-processing builds, MPICH and OpenMPI provide specific wrappers to invoke the Fortran compiler (<em>e.g.</em> <code>mpif90</code> or <code>mpifort</code>).  Depending on the computing environment, full path names to these compiler commands may be required.</p>
+<p><strong><code>LD</code></strong> specifies the comand that invokes the loader (linker) used in the final stage of building the executable, and is usually the same command used for the Fortran compiler (<strong><code>FC</code></strong> above).</p>
+<p><strong><code>FORTRAN_FREEFORM</code></strong> specifies the particular compiler flags needed to recognize free-form Fortran source code style.  These flags are compiler dependent; examples for GCC, Intel, and Nvidia Fortran compilers are given in the default Makefile.</p>
+<p><strong><code>NETCDF_INC</code></strong> specifies the <em><code>include</code></em> directory where the NetCDF Fortran module file resizes.  This file is often called <em><code>netcdf.mod</code></em>.  The full path to the directory that contains the <em><code>netcdf.mod</code></em> file must be provided here.  If the <code>nf-config</code> command is available (available with a well-configured NetCDF installation), the command <code>nf-config --fflags</code> may provide the appropriate directory.</p>
+<p>The default Makefile assumes that the NetCDF <em><code>lib</code></em> and <em><code>include</code></em> directories are subdirectories of the same parent directory, specified by environment variable <strong><code>NETCDF</code></strong>. Particular installations of the NetCDF software may not follow that convention, so users may need to explicitly set the NetCDF <em><code>include</code></em> directory here.</p>
+<p><strong><code>NETCDF_LIB</code></strong> specifies the <em><code>lib</code></em> directory where the NetCDF library files reside. The full path to the directory that contains the NetCDF library files must be provided here. If the <code>nf-config</code> command is available (available with a well-configured NetCDF installation), the command <code>nf-config --flibs</code> may include the appropriate directory.</p>
+<p>The default Makefile assumes that the NetCDF <em><code>lib</code></em> and <em><code>include</code></em> directories are subdirectories of the same parent directory, specified by environment variable <strong><code>NETCDF</code></strong>. Particular installations of the NetCDF software may not follow that convention, so users may need to explicitly set the NetCDF <em><code>lib</code></em> directory here.</p>
+<p><strong><code>FFLAGS</code></strong> specifies additional options that may be required for the Fortran compiler.  These options are often compiler-dependent.  The Makefile is set up so that <strong><code>FFLAGS</code></strong> will inherit values from <strong><code>NETCDF_INC</code></strong> and <strong><code>FORTRAN_FREEFORM</code></strong>.  Additional flags may include, for example, optimization flags.</p>
+<p><strong><code>LDLIBS</code></strong> specifies options instructing the loader to load specific libraries.  The Makefile is set up for <strong><code>LDLIBS</code></strong> to inherit the directory path specified in <strong><code>NETCDF_LIB</code></strong>, while explicitly referencing the <em>netcdff</em> library.  </p>
+<p><strong><code>DEBUG</code></strong> specifies options to include additional debugging capabilities for the executable.  These options result in a substantially slower program execution, so they are usually turned off (commented out) unless needed for debugging purposes.</p>
+<!--
+**`LDFLAGS`** may be used to specify additional options to the loader.  If not needed it may be left blank.
+-->
+
+<h3 id="configuring-with-cmake">Configuring with CMake</h3>
+<p>After cloning the repo, create a build directory and <code>cd</code> to that directory.</p>
+<pre><code class="language-bash">mkdir build
+cd build
+</code></pre>
+<p>Call CMake with the desired options</p>
+<pre><code class="language-bash">cmake [-DPARALLEL=On] [-DCMAKE_BUILD_TYPE=Debug] &lt;source_repo&gt;
+</code></pre>
+<p><code>&lt;source_repo&gt;</code> should point to the root of the AOSPRE source repo.</p>
+<p><code>-DPARALLEL=On</code> will attempt to find and link against an implementation of MPI.</p>
+<p><code>-DCMAKE_BUILD_TYPE=Debug</code> will build a debug version of the executable. This is significantly slower, but easier to debug. Other possible options besides <code>Debug</code> are <code>RelWithDebInfo</code> (optimizations on, but debug info included), <code>MinSizeRel</code> (smallest executable size), and <code>Release</code> (default, optimizations and no debug info)</p>
+<p>Several environment variables can also be set to affect how CMake configures the build. Such environment variables can either be set using shell syntax (e.g. <code>FOO=bar cmake ..</code>) or with the <code>-D</code> option (e.g. <code>cmake -DFOO=bar ..</code>). Following are some environment variables of note:</p>
+<p><strong><code>FC</code></strong> sets the location of the Fortran compiler. Note: If this is set to <code>mpifort</code> or similar MPI wrapper, the <code>-DPARALLEL=On</code> option does still need to be set.</p>
+<p><strong><code>NETCDF_ROOT</code></strong> is the root of the NetCDF installation. This might need to be set if your NetCDF location is in a non-standard location.</p>
+<p><strong><code>MPI_HOME</code></strong> is the root of the MPI installation. If <code>PARALLEL</code> is turned on and CMake has trouble finding your installation of MPI, setting this variable should help.</p>
+<h2 id="building">Building</h2>
+<p>Invoke build system command to compile.</p>
+<pre><code class="language-bash">make
+</code></pre>
+<p>The resulting executable should be called <em><code>aospre</code></em></p>
+<h3 id="cleaning">Cleaning</h3>
+<pre><code class="language-bash">make clean
+</code></pre>
+<p>This removes all artifacts creating during the build such as object files, module files, and the executable. This may be useful if the compiler has changed, or if there were errors in a previous attempt to build the code.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../preliminaries/" class="btn btn-neutral float-left" title="Preliminaries and Prerequsites"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../acquiretables/" class="btn btn-neutral float-right" title="Acquire the CR-SIM tables">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../preliminaries/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../acquiretables/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

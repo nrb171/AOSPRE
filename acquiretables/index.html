@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/acquiretables/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Acquire the CR-SIM tables - APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Acquire the CR-SIM tables";
+        var mkdocs_page_input_path = "acquiretables.md";
+        var mkdocs_page_url = "/acquiretables/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../preliminaries/">Preliminaries and Prerequsites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../building/">Build the AOSPRE executable from source</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Acquire the CR-SIM tables</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#download-the-cr-sim-software-package">Download the CR-SIM software package</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unpack-cr-sim-tar-file">Unpack CR-SIM tar file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-a-link-to-the-cr-sim-tables">Create a link to the CR-SIM tables</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testcase/">Run the test case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running/">Running your own case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../namelist/">Namelist</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../scanning_table_library/">Scanning table library</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Acquire the CR-SIM tables</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="acquire-the-cr-sim-lookup-tables">Acquire the CR-SIM lookup tables</h1>
+<p>AOSPRE depends on a large set of lookup tables provided with the CR-SIM
+software download.  The tables require more than 20GB of disk space,
+and are not included in the AOSPRE download.  The CR-SIM package can be
+downloaded from <a href="https://www.bnl.gov/cmas/cr-sim.php">https://www.bnl.gov/cmas/cr-sim.php</a>.
+Download the full software package.</p>
+<h2 id="download-the-cr-sim-software-package">Download the CR-SIM software package</h2>
+<p>The recommendation is to move to the top level
+<code></nobr>AOSPRE/</nobr></code> directory, and download the CR-SIM package
+into this directory.  The download file is a compressed tar file more
+than 12GB in size.  The file will be named according to the version of CR-SIM downloaded:  <code><nobr>crsim-&lt;<i>version</i>&gt;.tar.gz</nobr></code>.</p>
+<h2 id="unpack-cr-sim-tar-file">Unpack CR-SIM tar file</h2>
+<p>Once downloaded untar the crsim tar file:</p>
+<blockquote>
+<p><code>tar -xvf crsim-&lt;<i>version</i>&gt;.tar.gz</code></p>
+</blockquote>
+<p>or you may choose to unpack only the tables needed for AOSPRE:</p>
+<blockquote>
+<p><code>tar -xvf crsim-&lt;<i>version</i>&gt;.tar.gz crsim-&lt;<i>version</i>&gt;/share/crsim/aux</code></p>
+</blockquote>
+<p>Either way, contents of the tar file will be unpacked into a directory named <code><nobr>crsim-&lt;<i>version</i>&gt;/</nobr></code>.</p>
+<p>Once unpacked, the downloaded crsim tar file may be removed.</p>
+<h2 id="create-a-link-to-the-cr-sim-tables">Create a link to the CR-SIM tables</h2>
+<p>The CR-SIM tables are located in directory
+<code><nobr>crsim-&lt;<i>version</i>&gt;/share/crsim/aux/</nobr></code>.
+When AOSPRE runs, it assumes it will find tables under a directory called <code>aux/</code> immediately
+above the working directory.  Further examples in this documentation
+assume that execution of AOSPRE will occur in a working directory under
+the top-level <code><nobr>AOSPRE/</nobr></code> directory.  For this reason,
+it is recommended to create a soft link in this top-level directory to
+the <code>aux/</code> tables directory:</p>
+<blockquote>
+<p><code>ln -s crsim&lt;<i>version</i>&gt;/share/crsim/aux .</code></p>
+</blockquote>
+<p>If you set up to run AOSPRE in other locations, remember to link the
+CR-SIM <code>aux/</code> directory with a soft link <code>aux</code>
+just above your AOSPRE run directory.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../building/" class="btn btn-neutral float-left" title="Build the AOSPRE executable from source"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../testcase/" class="btn btn-neutral float-right" title="Run the test case">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../building/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../testcase/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

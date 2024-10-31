@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/namelist/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Namelist - APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Namelist";
+        var mkdocs_page_input_path = "namelist.md";
+        var mkdocs_page_url = "/namelist/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../preliminaries/">Preliminaries and Prerequsites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../building/">Build the AOSPRE executable from source</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acquiretables/">Acquire the CR-SIM tables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testcase/">Run the test case</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running/">Running your own case</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Namelist</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#options">&amp;options</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#seed">seed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#wrf_glob_pattern">wrf_glob_pattern</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#output_filename_format_string">output_filename_format_string</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#leg_initial_time">leg_initial_time</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#leg_time_seconds">leg_time_seconds</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flight_waypoints_x">flight_waypoints_x</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flight_waypoints_y">flight_waypoints_y</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flight_waypoints_vert">flight_waypoints_vert</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flight_level_coordinate">flight_level_coordinate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#air_speed">air_speed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#herky_jerky">herky_jerky</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scanning">&amp;scanning</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#crsim_config">crsim_config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scanning_table">scanning_table</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pulse_repetition_frequency">pulse_repetition_frequency</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pulses_per_pulse_set">pulses_per_pulse_set</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#revisits_per_acquisition_time">revisits_per_acquisition_time</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#beams_per_acquisition_time">beams_per_acquisition_time</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#seconds_for_scan_cycle">seconds_for_scan_cycle</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#meters_between_gates">meters_between_gates</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#meters_to_center_of_first_gate">meters_to_center_of_first_gate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#max_range_in_meters">max_range_in_meters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fold_limit_lower">fold_limit_lower</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fold_limit_upper">fold_limit_upper</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#config_output">&amp;config_output</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../scanning_table_library/">Scanning table library</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">APAR Observing Simulation, Processing, and Research Environment (AOSPRE) Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Namelist</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="namelist-file"><strong>Namelist file</strong></h1>
+<p>Fortran namelist to control aspects of the AOSPRE simulation.  Organized in sections <a href="#options">&amp;options</a>, <a href="#scanning">&amp;scanning</a>, and <a href="#config_output">&amp;config_output</a>, each representing a Fortran <em>namelist record</em>.</p>
+<h2 id="options">&amp;options</h2>
+<h3 id="seed"><strong>seed</strong></h3>
+<p><em>integer array</em></p>
+<ul>
+<li>integer seeds to initialize the Fortran random number generator.  The number of integers needed to initialize the random number generator is compiler-dependent.</li>
+<li>optional, defaults to system-dependent random initialization.</li>
+</ul>
+<pre><code>seed = 198276, 98120419, 166, -16189763, 66389692, 1470800236
+</code></pre>
+<hr />
+<h3 id="wrf_glob_pattern"><strong>wrf_glob_pattern</strong></h3>
+<p><em>string</em></p>
+<ul>
+<li>pattern to find model output files, according to conventional POSIX globbing (wildcard) rules.</li>
+</ul>
+<pre><code> wrf_glob_pattern   = &quot;/data/wrf/supercell/100m/wrfout_d01_????-??-??_??:??:??&quot;
+</code></pre>
+<hr />
+<h3 id="output_filename_format_string"><strong>output_filename_format_string</strong></h3>
+<p><em>string</em></p>
+<ul>
+<li>Fortran format string to build output file names.</li>
+</ul>
+<pre><code>output_filename_format_string = '(&quot;supercell_&quot;,A,&quot;_&quot;,A,&quot;.nc&quot;)'
+</code></pre>
+<hr />
+<h3 id="leg_initial_time"><strong>leg_initial_time</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>time (seconds past model initialization time) to start the flight.</li>
+</ul>
+<pre><code> leg_initial_time = 4500
+</code></pre>
+<hr />
+<h3 id="leg_time_seconds"><strong>leg_time_seconds</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>duration (in seconds) of the flight.</li>
+</ul>
+<pre><code> leg_time_seconds = 300
+</code></pre>
+<hr />
+<h3 id="flight_waypoints_x"><strong>flight_waypoints_x</strong></h3>
+<p><em>float array</em></p>
+<ul>
+<li>x-coordinates (model grid units) of the waypoints of the flight.</li>
+</ul>
+<pre><code>flight_waypoints_x    =    150.5,  350.0,  350.0,
+</code></pre>
+<hr />
+<h3 id="flight_waypoints_y"><strong>flight_waypoints_y</strong></h3>
+<p><em>float array</em></p>
+<ul>
+<li>y-coordinates (model grid units) of the waypoints of the flight.</li>
+</ul>
+<pre><code>flight_waypoints_y    =    150.75,  150.25,  350.0,
+</code></pre>
+<hr />
+<h3 id="flight_waypoints_vert"><strong>flight_waypoints_vert</strong></h3>
+<p><em>float array</em></p>
+<ul>
+<li>vertical coordinates (in units of the flight_level_coordinate) of the waypoints of the flight.</li>
+</ul>
+<pre><code> flight_waypoints_vert =  1500.0,  1500.0,  1500.0,
+</code></pre>
+<hr />
+<h3 id="flight_level_coordinate"><strong>flight_level_coordinate</strong></h3>
+<p><em>single character</em></p>
+<ul>
+<li>Vertical coordinate used for flight waypoints.  Valid values are <ul><ul> - 'Z' (height in meters)</ul> <ul> - 'P' (Pressure in hPa).</ul></ul></li>
+</ul>
+<pre><code>flight_level_coordinate   = &quot;Z&quot;
+</code></pre>
+<hr />
+<h3 id="air_speed"><strong>air_speed</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>constant air speed (m/s) for the flight.</li>
+</ul>
+<pre><code> air_speed = 120.0
+</code></pre>
+<hr />
+<h3 id="herky_jerky"><strong>herky_jerky</strong></h3>
+<p><em>logical</em></p>
+<ul>
+<li>explain this.</li>
+</ul>
+<pre><code> herky_jerky = .FALSE.
+</code></pre>
+<hr />
+<!--
+## &attitude_external_source
+*Needs work; probably not functioning well*
+---------------------------------------------------------------------------------------------------------------------------------------------------
+-->
+
+<h2 id="scanning">&amp;scanning</h2>
+<h3 id="crsim_config"><strong>crsim_config</strong></h3>
+<p><em>string</em></p>
+<ul>
+<li>file name for CR-SIM configuration</li>
+</ul>
+<pre><code>crsim_config = &quot;CONFIG&quot;
+</code></pre>
+<hr />
+<h3 id="scanning_table"><strong>scanning_table</strong></h3>
+<p><em>string</em> </p>
+<ul>
+<li>file name for the table that defines the scanning strategy</li>
+</ul>
+<pre><code>scanning_table = &quot;Scanning_Table_LHS&quot;
+</code></pre>
+<hr />
+<h3 id="pulse_repetition_frequency"><strong>pulse_repetition_frequency</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code>pulse_repetition_frequency = 2000
+</code></pre>
+<hr />
+<h3 id="pulses_per_pulse_set"><strong>pulses_per_pulse_set</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code>pulses_per_pulse_set = 2
+</code></pre>
+<hr />
+<h3 id="revisits_per_acquisition_time"><strong>revisits_per_acquisition_time</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code>revisits_per_acquisition_time = 7
+</code></pre>
+<hr />
+<h3 id="beams_per_acquisition_time"><strong>beams_per_acquisition_time</strong></h3>
+<p><em>integer</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code>beams_per_acquisition_time     = 3
+</code></pre>
+<hr />
+<h3 id="seconds_for_scan_cycle"><strong>seconds_for_scan_cycle</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code> ! seconds_for_scan_cycle         = 2.0
+</code></pre>
+<hr />
+<h3 id="meters_between_gates"><strong>meters_between_gates</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code> meters_between_gates           = 150.
+</code></pre>
+<hr />
+<h3 id="meters_to_center_of_first_gate"><strong>meters_to_center_of_first_gate</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code> meters_to_center_of_first_gate = 150.
+</code></pre>
+<hr />
+<h3 id="max_range_in_meters"><strong>max_range_in_meters</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+</ul>
+<pre><code> max_range_in_meters            = 75000.
+</code></pre>
+<hr />
+<h3 id="fold_limit_lower"><strong>fold_limit_lower</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+<li>optional (<em>is this used anymore or can we always determine the limits from the pulse configuration?</em>)</li>
+</ul>
+<pre><code>fold_limit_lower = -16.905
+</code></pre>
+<hr />
+<h3 id="fold_limit_upper"><strong>fold_limit_upper</strong></h3>
+<p><em>float</em></p>
+<ul>
+<li>describe this</li>
+<li>optional (<em>is this used anymore or can we always determine the limits from the pulse configuration?</em>)</li>
+</ul>
+<pre><code>fold_limit_upper =  16.905
+</code></pre>
+<hr />
+<h2 id="config_output">&amp;config_output</h2>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../running/" class="btn btn-neutral float-left" title="Running your own case"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../scanning_table_library/" class="btn btn-neutral float-right" title="Scanning table library">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../running/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../scanning_table_library/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
