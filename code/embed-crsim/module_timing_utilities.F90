@@ -99,13 +99,22 @@ contains
   !-------------------------------------------------------------------------------
   !
 
-  subroutine timer_print(name, label, percent_of)
+  subroutine timer_print(name, label, percent_of, fatal)
     implicit none
     character(len=*), intent(in) :: name
     character(len=*), optional, intent(in) :: label
     real(kind=RKIND), optional, intent(in) :: percent_of
+    logical,          optional, intent(in) :: fatal
     real                            :: instant
     integer :: k
+    logical :: local_fatal
+
+    if (present(fatal)) then
+        local_fatal = fatal
+    else
+        local_fatal = .FALSE.
+    endif
+
     do k = 1, MAX_TIMERS
         if (timers(k)%name == name) then
             call cpu_time(instant)
@@ -125,8 +134,12 @@ contains
             return
         endif
     enddo
-    write(*,'( "***** ERROR in TIMER_PRINT ***** Timer name ", A, " not found.")') trim(name)
-    stop "TIMER_PRINT"
+    if (local_fatal) then
+        write(*,'( "***** ERROR in TIMER_PRINT ***** Timer name ", A, " not found.")') trim(name)
+        stop "TIMER_PRINT"
+    else
+        write(*,'( "***** WARNING in TIMER_PRINT ***** Timer name ", A, " not found.")') trim(name)
+    endif
 
   end subroutine timer_print
 
