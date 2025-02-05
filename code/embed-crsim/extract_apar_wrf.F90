@@ -1747,9 +1747,9 @@ subroutine namelist_options ( namelist_file , seedlen , opts , scan , conf )
   write(*,*)
   write(*,'(" sweep_count = ", I6)') scan%sweep_count
   write(*,'(" beam_count  = ", I6)') scan%beam_count
-  write(*,'(" seconds_for_scan_cycle  = ", F12.8)') scan%seconds_for_scan_cycle
-  write(*,'(" skip_seconds_between_scan  = ", F12.8)') scan%skip_seconds_between_scans
-  write(*,'(" seconds_plus_skip  = ", F12.8)') scan%seconds_plus_skip
+  write(*,'(" seconds_for_scan_cycle  = ", F20.8)') scan%seconds_for_scan_cycle
+  write(*,'(" skip_seconds_between_scan  = ", F20.8)') scan%skip_seconds_between_scans
+  write(*,'(" seconds_plus_skip  = ", F20.8)') scan%seconds_plus_skip
   do k = 1, scan%sweep_count
       write(*,'(6x,"Sweep ",I6, " :: beams ", I6, " through ", I6, " :: timing ", F12.6, " through ", F12.6, " seconds")') &
            k, scan%sweep_start_index(k), scan%sweep_end_index(k), &
