@@ -10,6 +10,7 @@ module module_access_wrf
   integer, public, parameter :: MAX_WRF_TIMES = 300
   real(kind=RKIND),parameter :: PI2 = PI*PI
   public :: find_all_wrf_times
+  public :: projection_from_wrf_output
 
   type, public :: waypoint_type
       real(kind=RKIND) :: x_grid   ! x in gridpoint coordinate system, (reference 1)
@@ -3049,6 +3050,114 @@ contains
          xb*yb*za*self%w(ip,jp,km) + xb*yb*zb*self%w(ip,jp,kp)
 
   end subroutine wrf_value
+
+!---------------------------------------------------------------------------------------------
+!---------------------------------------------------------------------------------------------
+
+  subroutine projection_from_wrf_output(wrf_file, proj)
+    use netcdf, only : NF90_NOWRITE
+    use netcdf, only : NF90_GLOBAL
+    use netcdf, only : nf90_open
+    use netcdf, only : nf90_close
+    use netcdf, only : nf90_get_att
+    use netcdf, only : nf90_inq_varid
+    use netcdf, only : nf90_get_var
+
+    use module_llxy, only : proj_info
+    use module_llxy, only : PROJ_LC
+    use module_llxy, only : PROJ_PS
+    use module_llxy, only : PROJ_MERC
+    use module_llxy, only : map_init
+    use module_llxy, only : map_set
+
+    implicit none
+    character(len=*), intent(in) :: wrf_file
+    type(proj_info), intent(out) :: proj
+
+    integer :: ncid
+    integer :: ierr
+    integer :: varid
+
+    integer :: map_proj ! 1=Lambert Conformal; 2=Polar Stereographic; 3=Mercator
+    real(kind=RKIND)    :: truelat1
+    real(kind=RKIND)    :: truelat2
+    real(kind=RKIND)    :: lat1
+    real(kind=RKIND)    :: lon1
+    real(kind=RKIND)    :: stdlon
+    real(kind=RKIND)    :: dx
+    real(kind=RKIND)    ::  knowni
+    real(kind=RKIND)    ::  knownj
+    real, dimension(1) :: dummy1
+
+    call map_init(proj)
+    
+    ierr = nf90_open(trim(wrf_file), NF90_NOWRITE, ncid)
+    call error_handler ( ierr , "Problem opening file "//trim(wrf_file) )
+
+    ierr = nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", map_proj)
+    call error_handler ( ierr , "Problem getting MAP_PROJ attribute from file "//trim(wrf_file) )
+
+    ierr = nf90_get_att(ncid, NF90_GLOBAL, "TRUELAT1", truelat1)
+    call error_handler ( ierr , "Problem getting TRUELAT1 attribute from file "//trim(wrf_file) )
+
+    ierr = nf90_inq_varid (ncid, "XLAT", varid )
+    call error_handler(ierr, "Problem inquire varid for XLAT" )
+    ierr = nf90_get_var(ncid, varid, dummy1, start=(/1,1,1/), count=(/1,1,1/))
+    call error_handler(ierr, "Problem getting corner latitude")
+    print*, 'lat1 = ', dummy1
+    lat1 = dummy1(1)
+
+    ierr = nf90_inq_varid (ncid, "XLONG", varid )
+    call error_handler(ierr, "Problem inquire varid for XLONG" )
+    ierr = nf90_get_var(ncid, varid, dummy1, start=(/1,1,1/), count=(/1,1,1/))
+    call error_handler(ierr, "Problem getting corner longitude")
+    print*, 'lon1 = ', dummy1
+    lon1 = dummy1(1)
+    
+    ierr = nf90_get_att(ncid, NF90_GLOBAL, "DX", dx)
+    call error_handler ( ierr , "Problem getting DX attribute from file "//trim(wrf_file) )
+
+    select case (map_proj)
+    case (PROJ_LC)
+
+        ierr = nf90_get_att(ncid, NF90_GLOBAL, "TRUELAT2", truelat2)
+        call error_handler ( ierr , "Problem getting TRUELAT2 attribute from file "//trim(wrf_file) )
+
+        ierr = nf90_get_att(ncid, NF90_GLOBAL, "STAND_LON", stdlon)
+        call error_handler ( ierr , "Problem getting STAND_LON attribute from file "//trim(wrf_file) )
+
+        knowni = 1.0
+        knownj = 1.0
+        call map_set(PROJ_LC, proj, truelat1=truelat1, truelat2=truelat2, lat1=lat1, lon1=lon1, knowni=knowni, knownj=knownj, stdlon=stdlon, dx=dx)
+        print*, "cone factor = ", proj%cone
+
+    case (PROJ_PS)
+
+        ierr = nf90_get_att(ncid, NF90_GLOBAL, "STAND_LON", stdlon)
+        call error_handler ( ierr , "Problem getting STAND_LON attribute from file "//trim(wrf_file) )
+
+        knowni = 1.0
+        knownj = 1.0
+        call map_set(PROJ_PS, proj, truelat1=truelat1, lat1=lat1, lon1=lon1, knowni=knowni, knownj=knownj, stdlon=stdlon, dx=dx)
+        print*, "cone factor = ", proj%cone
+
+    case (PROJ_MERC)
+
+        knowni = 1.0
+        knownj = 1.0
+        call map_set(PROJ_MERC, proj, truelat1=truelat1, lat1=lat1, lon1=lon1, knowni=knowni, knownj=knownj, dx=dx)
+        print*, "cone factor = ", proj%cone
+
+    case default
+        write(*,'("Unrecognized map projection: MAP_PROJ attribute = ", I6)') map_proj
+        write(*,'("   Only Lambert Conformal, Polar Stereographic, and Mercator projections are supported")')
+        stop
+    end select
+    
+    ierr = nf90_close(ncid)
+    call error_handler ( ierr , "Problem closing file "//trim(wrf_file) )
+
+  end subroutine projection_from_wrf_output
 
 !---------------------------------------------------------------------------------------------
 !---------------------------------------------------------------------------------------------
