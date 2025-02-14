@@ -1589,16 +1589,31 @@ contains
 !---------------------------------------------------------------------------------------------
 !---------------------------------------------------------------------------------------------
 
-  subroutine write_volume ( self , volume , primary_axis )
+  subroutine write_volume ( self , volume , primary_axis, proj )
     use netcdf, only : nf90_put_var
     use kwm_date_utilities, only : geth_newdate
+    use module_llxy, only : proj_info
+    use module_llxy, only : PROJ_LC
+    use module_llxy, only : PROJ_PS
+    use module_llxy, only : PROJ_MERC
     implicit none
     class (cfradial_type), intent(inout) :: self
     type(volume_type), target :: volume
     character(len=*), intent(in) :: primary_axis
+    type(proj_info), intent(in) :: proj
     integer :: ierr
     type(volume_field_type), pointer :: ptr
     real(kind=RKIND), pointer, dimension(:,:) :: arr
+
+    integer :: k
+    real(kind=RKIND) :: rotang
+    real(kind=RKIND), allocatable, dimension(:) :: workspace
+    real(kind=RKIND), allocatable, dimension(:) :: alpha
+    real(kind=RKIND), allocatable, dimension(:) :: sinalpha
+    real(kind=RKIND), allocatable, dimension(:) :: cosalpha
+    real(kind=RKIND), allocatable, dimension(:) :: utrue
+    real(kind=RKIND), allocatable, dimension(:) :: vtrue
+    
     ! print*, 'BEGIN write volume'
 
     ierr = nf90_put_var(self%ncid, self%volume_number_varid, volume%number)
@@ -1680,8 +1695,31 @@ contains
     ierr = nf90_put_var(self%ncid, self%sweep_end_ray_index_varid, volume%sweep_end_ray_index(1:volume%sweep))
     call error_handler(ierr, "Problem put sweep_end_ray_index")
 
-    ierr = nf90_put_var(self%ncid, self%azimuth_varid, volume%azimuth(1:volume%nrays))
-    call error_handler(ierr, "Problem put azimuth")
+    if (proj%projected) then
+        !  Since azimuth is relative to true north, for projected WRF data we need to rotate
+        !  azimuth angles from grid-relative azimuth to true azimuth
+
+        select case (proj%code)
+        case (PROJ_PS, PROJ_LC)
+            ! Angle from north depends on cone factor and the difference between longitude and the standard longitude (proj%stdlon).
+            allocate(workspace(volume%nrays))
+            do k = 1, volume%nrays
+                rotang = proj%hemi * (volume%longitude(k)-proj%stdlon) * proj%cone
+                workspace(k) = mod(volume%azimuth(k) + rotang + 720, 360.0)
+            enddo
+            ierr = nf90_put_var(self%ncid, self%azimuth_varid, workspace)
+            call error_handler(ierr, "Problem put azimuth")
+            deallocate(workspace)
+        case (PROJ_MERC)
+            ! No rotation of angles needed for Mercator projections
+            ierr = nf90_put_var(self%ncid, self%azimuth_varid, volume%azimuth(1:volume%nrays))
+            call error_handler(ierr, "Problem put azimuth")
+        end select
+    else
+        ierr = nf90_put_var(self%ncid, self%azimuth_varid, volume%azimuth(1:volume%nrays))
+        call error_handler(ierr, "Problem put azimuth")
+    endif
+    
 
     ierr = nf90_put_var(self%ncid, self%elevation_varid, volume%elevation(1:volume%nrays))
     call error_handler(ierr, "Problem put elevation")
@@ -1689,8 +1727,30 @@ contains
     ierr = nf90_put_var(self%ncid, self%georefs_applied_varid, volume%georefs_applied(1:volume%nrays))
     call error_handler(ierr, "Problem put georefs_applied")
 
-    ierr = nf90_put_var(self%ncid, self%heading_varid, volume%heading(1:volume%nrays))
-    call error_handler(ierr, "Problem put heading")
+    if (proj%projected) then
+        !  Since heading is relative to true north, for projected WRF data we need to rotate
+        !  heading angles from grid-relative azimuth to true heading
+
+        select case (proj%code)
+        case (PROJ_PS, PROJ_LC)
+            ! Angle from north depends on cone factor and the difference between longitude and the standard longitude (proj%stdlon).
+            allocate(workspace(volume%nrays))
+            do k = 1, volume%nrays
+                rotang = proj%hemi * (volume%longitude(k)-proj%stdlon) * proj%cone
+                workspace(k) = mod(volume%heading(k) + rotang + 720, 360.0)
+            enddo
+            ierr = nf90_put_var(self%ncid, self%heading_varid, workspace)
+            call error_handler(ierr, "Problem put heading")
+            deallocate(workspace)
+        case (PROJ_MERC)
+            ! No rotation of angles needed for Mercator projection
+            ierr = nf90_put_var(self%ncid, self%heading_varid, volume%heading(1:volume%nrays))
+            call error_handler(ierr, "Problem put heading")
+        end select
+    else
+        ierr = nf90_put_var(self%ncid, self%heading_varid, volume%heading(1:volume%nrays))
+        call error_handler(ierr, "Problem put heading")
+    endif
 
     ierr = nf90_put_var(self%ncid, self%roll_varid, volume%roll(1:volume%nrays))
     call error_handler(ierr, "Problem put roll")
@@ -1765,20 +1825,73 @@ contains
 
     !
 
-    ierr = nf90_put_var(self%ncid, self%eastward_velocity_varid, volume%eastward_velocity(1:volume%nrays))
-    call error_handler(ierr, "Problem put eastward_velocity")
+    if (proj%projected) then
+        select case (proj%code)
+        case (PROJ_PS, PROJ_LC)
+            allocate(alpha(1:volume%nrays))
+            allocate(cosalpha(1:volume%nrays))
+            allocate(sinalpha(1:volume%nrays))
+            allocate(utrue(1:volume%nrays))
+            allocate(vtrue(1:volume%nrays))
+            alpha = proj%hemi * (volume%longitude(1:volume%nrays)-proj%stdlon) * proj%cone
+            cosalpha = cos(alpha)
+            sinalpha = sin(alpha)
+            utrue = volume%eastward_velocity(1:volume%nrays)*cosalpha - volume%northward_velocity(1:volume%nrays)*sinalpha
+            vtrue = volume%northward_velocity(1:volume%nrays)*cosalpha + volume%eastward_velocity(1:volume%nrays)*sinalpha
+        
+            ierr = nf90_put_var(self%ncid, self%eastward_velocity_varid, utrue)
+            call error_handler(ierr, "Problem put eastward_velocity")
 
-    ierr = nf90_put_var(self%ncid, self%northward_velocity_varid, volume%northward_velocity(1:volume%nrays))
-    call error_handler(ierr, "Problem put northward_velocity")
+            ierr = nf90_put_var(self%ncid, self%northward_velocity_varid, vtrue)
+            call error_handler(ierr, "Problem put northward_velocity")
+            deallocate(utrue, vtrue, alpha)
+            ! keep cosalpha and sinalpha for use below
+        case(PROJ_MERC)
+            ! No rotation of angles needed for Mercator projection
+            ierr = nf90_put_var(self%ncid, self%eastward_velocity_varid, volume%eastward_velocity(1:volume%nrays))
+            call error_handler(ierr, "Problem put eastward_velocity")
+
+            ierr = nf90_put_var(self%ncid, self%northward_velocity_varid, volume%northward_velocity(1:volume%nrays))
+            call error_handler(ierr, "Problem put northward_velocity")
+        end select
+    else
+        ierr = nf90_put_var(self%ncid, self%eastward_velocity_varid, volume%eastward_velocity(1:volume%nrays))
+        call error_handler(ierr, "Problem put eastward_velocity")
+
+        ierr = nf90_put_var(self%ncid, self%northward_velocity_varid, volume%northward_velocity(1:volume%nrays))
+        call error_handler(ierr, "Problem put northward_velocity")
+    endif
 
     ierr = nf90_put_var(self%ncid, self%vertical_velocity_varid, volume%vertical_velocity(1:volume%nrays))
     call error_handler(ierr, "Problem put vertical_velocity")
 
-    ierr = nf90_put_var(self%ncid, self%eastward_wind_varid, volume%eastward_wind(1:volume%nrays))
-    call error_handler(ierr, "Problem put eastward_wind")
+    if (proj%projected) then
+        select case (proj%code)
+        case (PROJ_PS, PROJ_LC)
+            allocate(utrue(1:volume%nrays))
+            allocate(vtrue(1:volume%nrays))
+            utrue = volume%eastward_wind(1:volume%nrays)*cosalpha - volume%northward_wind(1:volume%nrays)*sinalpha
+            vtrue = volume%northward_wind(1:volume%nrays)*cosalpha + volume%eastward_wind(1:volume%nrays)*sinalpha
 
-    ierr = nf90_put_var(self%ncid, self%northward_wind_varid, volume%northward_wind(1:volume%nrays))
-    call error_handler(ierr, "Problem put northward_wind")
+            ierr = nf90_put_var(self%ncid, self%eastward_wind_varid, utrue)
+            call error_handler(ierr, "Problem put eastward_wind")
+
+            ierr = nf90_put_var(self%ncid, self%northward_wind_varid, vtrue)
+            call error_handler(ierr, "Problem put northward_wind")
+        case (PROJ_MERC)
+            ierr = nf90_put_var(self%ncid, self%eastward_wind_varid, volume%eastward_wind(1:volume%nrays))
+            call error_handler(ierr, "Problem put eastward_wind")
+
+            ierr = nf90_put_var(self%ncid, self%northward_wind_varid, volume%northward_wind(1:volume%nrays))
+            call error_handler(ierr, "Problem put northward_wind")
+        end select
+    else
+        ierr = nf90_put_var(self%ncid, self%eastward_wind_varid, volume%eastward_wind(1:volume%nrays))
+        call error_handler(ierr, "Problem put eastward_wind")
+
+        ierr = nf90_put_var(self%ncid, self%northward_wind_varid, volume%northward_wind(1:volume%nrays))
+        call error_handler(ierr, "Problem put northward_wind")
+    endif
 
     ierr = nf90_put_var(self%ncid, self%vertical_wind_varid, volume%vertical_wind(1:volume%nrays))
     call error_handler(ierr, "Problem put vertical_wind")
