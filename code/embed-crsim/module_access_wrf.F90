@@ -3056,6 +3056,7 @@ contains
 
   subroutine projection_from_wrf_output(wrf_file, proj)
     use netcdf, only : NF90_NOWRITE
+    use netcdf, only : NF90_NOERR
     use netcdf, only : NF90_GLOBAL
     use netcdf, only : nf90_open
     use netcdf, only : nf90_close
@@ -3095,7 +3096,11 @@ contains
     call error_handler ( ierr , "Problem opening file "//trim(wrf_file) )
 
     ierr = nf90_get_att(ncid, NF90_GLOBAL, "MAP_PROJ", map_proj)
-    call error_handler ( ierr , "Problem getting MAP_PROJ attribute from file "//trim(wrf_file) )
+    if (.not. (ierr == NF90_NOERR)) then
+        ierr = nf90_close(ncid)
+        call error_handler ( ierr , "Problem closing file "//trim(wrf_file) )
+        return
+    endif
 
     ierr = nf90_get_att(ncid, NF90_GLOBAL, "TRUELAT1", truelat1)
     call error_handler ( ierr , "Problem getting TRUELAT1 attribute from file "//trim(wrf_file) )
