@@ -5,6 +5,7 @@ program extract_apar
   use module_access_wrf, only : find_all_wrf_times
   use module_access_wrf, only : wrf_metadata_type
   use module_access_wrf, only : options_type
+  use module_access_wrf, only : projection_from_wrf_output
   use module_crsim_wrapper, only : crsim_wrapper
   use module_flightpath, only : aircraft_metadata_type
   use module_flightpath, only : flightpath_class
@@ -192,17 +193,25 @@ program extract_apar
   !
   !  <wrf_reference_time> will be a 19-character string of the form "YYYY-MM-DD_hh:mm:ss".
   ! 
-
-  !
-  !    Idealized simulations, so set up an arbitrary map projection
-  !
-
   call timer_pause("WRFTIMES")
+
+
   call timer_resume("MAP")
 
-  call map_init(proj)
-  call map_set ( PROJ_LC, proj, truelat1=33.0_RKIND, truelat2=37.0_RKIND, lat1=35.0_RKIND, lon1=-100.0_RKIND, &
-       &         knowni=real(idim,kind=RKIND)/2.0, knownj=real(jdim,kind=RKIND)/2.0, stdlon=-100.0_RKIND, dx=dx )
+  !
+  !    For real-world WRF simulations, set up the map projection as described in the WRF output.
+  !
+
+  call projection_from_wrf_output(wrf_files(1), proj)
+      
+  if (proj%code == -999) then
+      !
+      !    For idealized simulations, set up an arbitrary map projection
+      !
+      call map_set ( PROJ_LC, proj, truelat1=33.0_RKIND, truelat2=37.0_RKIND, lat1=35.0_RKIND, lon1=-100.0_RKIND, &
+           &         knowni=real(idim,kind=RKIND)/2.0, knownj=real(jdim,kind=RKIND)/2.0, stdlon=-100.0_RKIND, dx=dx )
+      proj%projected = .FALSE. ! The horizontal grid is treated as an idealized cartesian coordinate plane.
+  endif
 
   call timer_pause("MAP")
 
@@ -269,7 +278,7 @@ program extract_apar
       call timer_print("OpenA")
       call timer_print("OpenB")
       flightpath_name = "flightpath.ascii"
-      call flightpath%dump(trim(flightpath_name), rank)
+      call flightpath%dump(trim(flightpath_name), proj, rank)
   endif  RANK_IF
   call timer_pause("FLIGHTPATH")
 
@@ -961,7 +970,7 @@ program extract_apar
                &         volume%nrays, volume%ngates, volume%sweep, volume%time_coverage_start, &
                &         volume%fold_limit_lower, volume%fold_limit_upper )
           call cf%prepare_metadata(volume)
-          call cf%write_volume(volume, scan%primary_axis)
+          call cf%write_volume(volume, scan%primary_axis, proj)
           call cf%close()
           call timer_pause("CFOUTPUT")
       endif
