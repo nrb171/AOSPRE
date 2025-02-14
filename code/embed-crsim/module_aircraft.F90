@@ -671,14 +671,27 @@ contains
   !-------------------------------------------------------------------------------
   !
 
-  subroutine flightpath_dump(self, outfile, rank)
+  subroutine flightpath_dump(self, outfile, proj, rank)
+    use module_llxy, only : proj_info
+    use module_llxy, only : PROJ_PS
+    use module_llxy, only : PROJ_LC
+    use module_llxy, only : PROJ_MERC
+    use module_llxy, only : ij_to_latlon
     implicit none
     class (flightpath_class), intent(in) :: self
     character(len=*), intent(in) :: outfile
+    type(proj_info), intent(in) :: proj
     integer, intent(in) :: rank
     integer :: ierr
     integer :: k
     integer :: dumpunit
+
+    real(kind=RKIND) :: xgrid
+    real(kind=RKIND) :: ygrid
+    real(kind=RKIND) :: lat
+    real(kind=RKIND) :: lon
+    real(kind=RKIND) :: rotang
+    real(kind=RKIND) :: track_true
 
     open(newunit=dumpunit, file=trim(outfile), form='formatted', action='write', iostat=ierr)
     if ( ierr /= 0 ) then
@@ -687,17 +700,49 @@ contains
     endif
 
     if (rank == 0) then
-        write(dumpunit,'(A10,A16,3A20,3A16,3A16,A16)') "Index", "   Time   ", &
-             &                                    "       X        ", "       Y        ", "       Z        ", &
-             &                                    "   ground dX/dT ", "   ground dY/dT ", "   ground dZ/dT ", &
-             &                                    "      U wind    ", "      V wind    ", "      W wind    ", &
-             &                                    "     track      "
+        if (proj%projected) then
+            write(dumpunit,'(A10,A16,3A20,3A16,3A16,4A16)') "Index", "   Time   ", &
+                 &                                    "       X        ", "       Y        ", "       Z        ", &
+                 &                                    "   ground dX/dT ", "   ground dY/dT ", "   ground dZ/dT ", &
+                 &                                    "      U wind    ", "      V wind    ", "      W wind    ", &
+                 &                                    "     track(grid)", "     track(true)", "    latitude    ", &
+                 &                                    "   longitude    "
+        else
+            write(dumpunit,'(A10,A16,3A20,3A16,3A16,4A16)') "Index", "   Time   ", &
+                 &                                    "       X        ", "       Y        ", "       Z        ", &
+                 &                                    "   ground dX/dT ", "   ground dY/dT ", "   ground dZ/dT ", &
+                 &                                    "      U wind    ", "      V wind    ", "      W wind    ", &
+                 &                                    "     track(grid)"
+        endif
     endif
 
     do k = 0, self%pathcount
-        write(dumpunit,'(I10, F16.4, 3F20.8, 3F16.8, 3F16.8, F16.8)') k, self%time_history(k), &
-             self%location_history(:,k), self%ground_velocity_history(:,k), self%wind_history(:,k), &
-             self%track_history(k)
+        if (proj%projected) then
+            xgrid = 1.0 + ( self%location_history(1,k) / proj%dx )
+            ygrid = 1.0 + ( self%location_history(2,k) / proj%dx )
+            call ij_to_latlon(proj, xgrid, ygrid, lat, lon)
+
+            select case (proj%code)
+            case default
+                stop "TODO:  proj%code"
+            case (PROJ_PS, PROJ_LC)
+                ! Angle from north depends on cone factor and the difference between longitude and the standard longitude (proj%stdlon).
+                rotang = proj%hemi * (lon-proj%stdlon) * proj%cone
+                track_true = self%track_history(k) + rotang + 720
+                track_true = mod(track_true, 360.0)
+            case (PROJ_MERC)
+                ! No rotation of angles needed
+                track_true = self%track_history(k)
+            end select
+
+            write(dumpunit,'(I10, F16.4, 3F20.8, 3F16.8, 3F16.8, F16.8, F16.8, F16.8, F16.8)') k, self%time_history(k), &
+                 self%location_history(:,k), self%ground_velocity_history(:,k), self%wind_history(:,k), &
+                 self%track_history(k), track_true, lat, lon
+        else
+            write(dumpunit,'(I10, F16.4, 3F20.8, 3F16.8, 3F16.8, F16.8, F16.8, F16.8, F16.8)') k, self%time_history(k), &
+                 self%location_history(:,k), self%ground_velocity_history(:,k), self%wind_history(:,k), &
+                 self%track_history(k)
+        endif
     enddo
 
     close(dumpunit)
@@ -934,6 +979,7 @@ contains
 
             xgrid = 1 + (self%location(1) / gridspace_dx)
             ygrid = 1 + (self%location(2) / gridspace_dx)
+
             if (options%flight_level_coordinate == "P") then
                 self%location(3) = metaA%get_z_at_p(xgrid, ygrid, options%waypoint(0)%p_Pa, z_index=zgrid)
                 zgrid = metaA%find_z_index(xgrid, ygrid, self%location(3))
@@ -962,8 +1008,7 @@ contains
             ! for time==0.0, self%pathcount==0
             !
 
-            call self%compute_at_time_and_location(aircraft, options%helicopter) 
-
+            call self%compute_at_time_and_location(aircraft, options%helicopter)
         endif
 
         !
@@ -1009,9 +1054,10 @@ contains
         !
 
         !  Update self%wind_history, self%ground_velocity_history:
-        call self%compute_at_time_and_location(aircraft, options%helicopter) 
+        call self%compute_at_time_and_location(aircraft, options%helicopter)
 
     enddo PLEG
+
   end subroutine flightpath_precompute
 
   !
