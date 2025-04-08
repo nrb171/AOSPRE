@@ -48,7 +48,7 @@ output_filename_format_string = '("supercell_",A,"_",A,".nc")'
 ### **leg_time_seconds**
 *integer*
 
-* duration (in seconds) of the flight.
+* duration (in seconds) of the entire flight.
 ```
  leg_time_seconds = 300
 ```
